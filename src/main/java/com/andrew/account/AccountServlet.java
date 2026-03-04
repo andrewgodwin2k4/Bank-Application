@@ -6,15 +6,20 @@ import jakarta.servlet.http.*;
 
 public class AccountServlet extends HttpServlet {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
     private AccountService service = new AccountService();
 
     @Override
-    protected void doPost(HttpServletRequest req,HttpServletResponse res) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         try {
             AccountRequest request = mapper.readValue(req.getInputStream(), AccountRequest.class);
 
-            Account account = service.createAccount(request.getName(), request.getInitialDeposit());
+            Account account = service.createAccount(
+                    request.getAccountHolderName(),
+                    request.getBranchName(),
+                    request.getIfscCode(),
+                    request.getInitialDeposit()
+            );
 
             res.setStatus(HttpServletResponse.SC_CREATED);
             res.setContentType("application/json");
@@ -23,10 +28,12 @@ public class AccountServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             res.getWriter().println(e.getMessage());
         }
     }
 
+    //change this so that u can only get using account number
     @Override
     protected void doGet(HttpServletRequest req,HttpServletResponse res) throws IOException {
 
@@ -41,7 +48,6 @@ public class AccountServlet extends HttpServlet {
             }
 
             res.setContentType("application/json");
-
             mapper.writeValue(res.getOutputStream(), account);
 
         } catch (Exception e) {
