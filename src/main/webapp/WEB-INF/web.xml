@@ -1,0 +1,37 @@
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <servlet>
+	    <servlet-name>AccountServlet</servlet-name>
+	    <servlet-class>com.andrew.account.AccountServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>AccountServlet</servlet-name>
+	    <url-pattern>/accounts</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TransferServlet</servlet-name>
+		<servlet-class>com.andrew.transfer.TransferServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TransferServlet</servlet-name>
+		<url-pattern>/transfer</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TransactionServlet</servlet-name>
+		<servlet-class>com.andrew.transaction.TransactionServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TransactionServlet</servlet-name>
+		<url-pattern>/transactions</url-pattern>
+	</servlet-mapping>
+
+</web-app>
