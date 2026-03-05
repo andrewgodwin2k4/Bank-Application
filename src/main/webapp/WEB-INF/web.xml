@@ -15,23 +15,13 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>TransferServlet</servlet-name>
-		<servlet-class>com.andrew.transfer.TransferServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>TransferServlet</servlet-name>
-		<url-pattern>/transfer</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>TransactionServlet</servlet-name>
 		<servlet-class>com.andrew.transaction.TransactionServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>TransactionServlet</servlet-name>
-		<url-pattern>/transactions</url-pattern>
+		<url-pattern>/transactions/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>

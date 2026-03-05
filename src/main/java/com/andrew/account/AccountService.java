@@ -1,24 +1,41 @@
 package com.andrew.account;
 
+import com.andrew.branch.Branch;
+import com.andrew.branch.BranchDAO;
+
 public class AccountService {
 
     private AccountDAO dao = new AccountDAO();
+    private BranchDAO branchDAO = new BranchDAO();
 
-    public Account createAccount(String name, String branch, String ifsc, double deposit) throws Exception {
+    public Account createAccount(String name, String ifsc, double deposit) throws Exception {
 
         if(name == null || name.isEmpty())
             throw new IllegalArgumentException("Name must not be empty");
 
-        if(deposit < 0)
+        if(deposit <= 0)
             throw new IllegalArgumentException("Deposit must be positive");
 
-        long accountNumber = generateAccountNumber();
+        Branch branch = branchDAO.getBranchByIFSC(ifsc);
+        if(branch == null)
+            throw new IllegalArgumentException("Invalid IFSC Code");
 
-        return dao.createAccount(accountNumber, name, branch, ifsc, deposit);
+        while(true) {
+            long accountNumber = generateAccountNumber();
+            try {
+                return dao.createAccount(accountNumber, name, branch.getBranchId(), deposit);
+            }
+            catch(Exception e) {
+                if(e.getMessage().contains("accounts_account_number_key")) {
+                    continue; // collision → generate again
+                }
+                throw e;
+            }
+        }
     }
 
-    public Account getAccount(int id) throws Exception {
-        return dao.getAccountById(id);
+    public Account getAccount(long accountNumber) throws Exception {
+        return dao.getAccountByNumber(accountNumber);
     }
 
     private long generateAccountNumber() {

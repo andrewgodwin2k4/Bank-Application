@@ -1,29 +1,33 @@
-package com.andrew;
+package com.andrew.transaction;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Transaction {
 
     private int transactionId;
-    private int fromAccount;
-    private int toAccount;
+    private long fromAccount;
+    private long toAccount;
     private double amount;
-    private Timestamp transactionTime;
+    private LocalDateTime transactionTime;
+    private String transactionType;
 
-    public Transaction(int transactionId, int fromAccount,
-                       int toAccount, double amount,
-                       Timestamp transactionTime) {
+    public Transaction(int transactionId, long fromAccount,
+                       long toAccount, double amount,
+                       LocalDateTime transactionTime,
+                       String transactionType) {
 
         this.transactionId = transactionId;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = amount;
         this.transactionTime = transactionTime;
+        this.transactionType = transactionType;
     }
 
     public int getTransactionId() { return transactionId; }
-    public int getFromAccount() { return fromAccount; }
-    public int getToAccount() { return toAccount; }
+    public long getFromAccount() { return fromAccount; }
+    public long getToAccount() { return toAccount; }
     public double getAmount() { return amount; }
-    public Timestamp getTransactionTime() { return transactionTime; }
+    public LocalDateTime getTransactionTime() { return transactionTime; }
+    public String getTransactionType() { return transactionType; }
 }

@@ -16,7 +16,6 @@ public class AccountServlet extends HttpServlet {
 
             Account account = service.createAccount(
                     request.getAccountHolderName(),
-                    request.getBranchName(),
                     request.getIfscCode(),
                     request.getInitialDeposit()
             );
@@ -35,11 +34,11 @@ public class AccountServlet extends HttpServlet {
 
     //change this so that u can only get using account number
     @Override
-    protected void doGet(HttpServletRequest req,HttpServletResponse res) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         try {
-            int id = Integer.parseInt(req.getParameter("id"));
-            Account account = service.getAccount(id);
+            long accountNumber = Long.parseLong(req.getParameter("accountNumber"));
+            Account account = service.getAccount(accountNumber);
 
             if (account == null) {
                 res.setStatus(HttpServletResponse.SC_NOT_FOUND);
