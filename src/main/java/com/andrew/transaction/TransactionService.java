@@ -56,7 +56,7 @@ public class TransactionService {
             creditStmt.setInt(2, receiverId);
             creditStmt.executeUpdate();
 
-            String txnSql = "INSERT INTO transactions(from_account, to_account, amount, transaction_type) VALUES (?, ?, ?, 'TRANSFER')";
+            String txnSql = "INSERT INTO transactions(from_account, to_account, amount) VALUES (?, ?, ?, 'TRANSFER')";
             PreparedStatement txnStmt = conn.prepareStatement(txnSql);
             txnStmt.setInt(1, senderId);
             txnStmt.setInt(2, receiverId);
@@ -101,7 +101,7 @@ public class TransactionService {
             updateStmt.setInt(2, accountId);
             updateStmt.executeUpdate();
 
-            String txnSql = "INSERT INTO transactions(from_account, to_account, amount, transaction_type) " +
+            String txnSql = "INSERT INTO transactions(from_account, to_account, amount) " +
                             "VALUES (NULL, ?, ?)";
 
             PreparedStatement txnStmt = conn.prepareStatement(txnSql);
@@ -129,7 +129,6 @@ public class TransactionService {
         Connection conn = DatabaseUtil.getConnection();
 
         try {
-
             conn.setAutoCommit(false);
 
             String sql = "SELECT account_id, balance FROM accounts WHERE account_number = ?";
@@ -153,7 +152,7 @@ public class TransactionService {
             updateStmt.setInt(2, accountId);
             updateStmt.executeUpdate();
 
-            String txnSql = "INSERT INTO transactions(from_account, to_account, amount, transaction_type) " +
+            String txnSql = "INSERT INTO transactions(from_account, to_account, amount) " +
                             "VALUES (?, NULL, ?)";
 
             PreparedStatement txnStmt = conn.prepareStatement(txnSql);
@@ -164,15 +163,12 @@ public class TransactionService {
             conn.commit();
 
         } catch (Exception e) {
-
             conn.rollback();
             throw e;
 
         } finally {
-
             conn.setAutoCommit(true);
             conn.close();
-
         }
     }
 }

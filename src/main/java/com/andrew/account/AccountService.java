@@ -27,7 +27,7 @@ public class AccountService {
             }
             catch(Exception e) {
                 if(e.getMessage().contains("accounts_account_number_key")) {
-                    continue; // collision → generate again
+                    continue;
                 }
                 throw e;
             }

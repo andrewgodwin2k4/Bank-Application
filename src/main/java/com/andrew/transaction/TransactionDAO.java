@@ -25,8 +25,8 @@ public class TransactionDAO {
                             "ORDER BY t.transaction_time DESC";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1, accountNumber);
-            stmt.setDouble(2, accountNumber);
+            stmt.setLong(1, accountNumber);
+            stmt.setLong(2, accountNumber);
 
             ResultSet rs = stmt.executeQuery();
 
