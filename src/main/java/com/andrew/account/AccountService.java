@@ -3,6 +3,8 @@ package com.andrew.account;
 import com.andrew.branch.Branch;
 import com.andrew.branch.BranchDAO;
 
+import java.util.List;
+
 public class AccountService {
 
     private AccountDAO dao = new AccountDAO();
@@ -40,5 +42,9 @@ public class AccountService {
 
     private long generateAccountNumber() {
         return 1000000000L + (long)(Math.random() * 9000000000L);
+    }
+
+    public List<Account> getUserAccounts(int userId) throws Exception {
+        return dao.getAccountsByUserId(userId);
     }
 }

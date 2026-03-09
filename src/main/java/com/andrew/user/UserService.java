@@ -1,5 +1,8 @@
 package com.andrew.user;
 
+import com.andrew.account.Account;
+import com.andrew.account.AccountDAO;
+
 public class UserService {
 
     private UserDAO dao = new UserDAO();
@@ -33,4 +36,15 @@ public class UserService {
         return user;
     }
 
+    public void linkAccount(int userId, long accountNumber) throws Exception {
+
+        AccountDAO accountDAO = new AccountDAO();
+
+        Account account = accountDAO.getAccountByNumber(accountNumber);
+
+        if(account == null)
+            throw new RuntimeException("Account not found");
+
+        dao.linkUserAccount(userId, account.getAccountId());
+    }
 }

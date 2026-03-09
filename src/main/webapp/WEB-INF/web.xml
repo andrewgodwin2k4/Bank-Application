@@ -11,7 +11,7 @@
 	
 	<servlet-mapping>
 	    <servlet-name>AccountServlet</servlet-name>
-	    <url-pattern>/accounts</url-pattern>
+	    <url-pattern>/accounts/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -22,6 +22,16 @@
 	<servlet-mapping>
 		<servlet-name>TransactionServlet</servlet-name>
 		<url-pattern>/transactions/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>UserServlet</servlet-name>
+		<servlet-class>com.andrew.user.UserServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>UserServlet</servlet-name>
+		<url-pattern>/users/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>

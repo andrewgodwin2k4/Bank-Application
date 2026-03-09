@@ -5,6 +5,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.util.List;
+import com.andrew.user.UserDAO;
 
 public class TransactionServlet extends HttpServlet {
 
@@ -16,7 +17,24 @@ public class TransactionServlet extends HttpServlet {
 
         try {
 
+            Integer userId = (Integer) req.getSession().getAttribute("userId");
+
+            if(userId == null) {
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                res.getWriter().println("User not logged in");
+                return;
+            }
+
             long accountNumber = Long.parseLong(req.getParameter("accountNumber"));
+
+            UserDAO userDAO = new UserDAO();
+
+            if(!userDAO.userOwnsAccount(userId, accountNumber)) {
+                res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                res.getWriter().println("You do not own this account");
+                return;
+            }
+
             List<Transaction> transactions = service.getTransactions(accountNumber);
 
             res.setContentType("application/json");
@@ -37,7 +55,23 @@ public class TransactionServlet extends HttpServlet {
 
             if(req.getRequestURI().endsWith("/transfer")) {
 
+                Integer userId = (Integer) req.getSession().getAttribute("userId");
+
+                if(userId == null) {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.getWriter().println("User not logged in");
+                    return;
+                }
+
                 TransferRequest request = mapper.readValue(req.getInputStream(), TransferRequest.class);
+
+                UserDAO userDAO = new UserDAO();
+
+                if(!userDAO.userOwnsAccount(userId, request.getFromAccount())) {
+                    res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    res.getWriter().println("You do not own this account");
+                    return;
+                }
 
                 service.transfer(
                         request.getFromAccount(),
@@ -62,7 +96,23 @@ public class TransactionServlet extends HttpServlet {
 
             else if(req.getRequestURI().endsWith("/withdraw")) {
 
+                Integer userId = (Integer) req.getSession().getAttribute("userId");
+
+                if(userId == null) {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.getWriter().println("User not logged in");
+                    return;
+                }
+
                 DepositRequest request = mapper.readValue(req.getInputStream(), DepositRequest.class);
+
+                UserDAO userDAO = new UserDAO();
+
+                if(!userDAO.userOwnsAccount(userId, request.getAccountNumber())) {
+                    res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    res.getWriter().println("You do not own this account");
+                    return;
+                }
 
                 service.withdraw(
                         request.getAccountNumber(),

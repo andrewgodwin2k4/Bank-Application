@@ -1,6 +1,8 @@
 package com.andrew.account;
 
 import java.io.IOException;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.*;
 
@@ -32,11 +34,27 @@ public class AccountServlet extends HttpServlet {
         }
     }
 
-    //change this so that u can only get using account number
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         try {
+            if(req.getRequestURI().endsWith("/my")) {
+
+                Integer userId = (Integer) req.getSession().getAttribute("userId");
+
+                if(userId == null) {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.getWriter().println("User not logged in");
+                    return;
+                }
+
+                List<Account> accounts = service.getUserAccounts(userId);
+
+                res.setContentType("application/json");
+                mapper.writeValue(res.getOutputStream(), accounts);
+                return;
+            }
+
             long accountNumber = Long.parseLong(req.getParameter("accountNumber"));
             Account account = service.getAccount(accountNumber);
 

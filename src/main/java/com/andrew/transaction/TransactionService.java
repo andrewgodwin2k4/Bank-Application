@@ -56,7 +56,7 @@ public class TransactionService {
             creditStmt.setInt(2, receiverId);
             creditStmt.executeUpdate();
 
-            String txnSql = "INSERT INTO transactions(from_account, to_account, amount) VALUES (?, ?, ?, 'TRANSFER')";
+            String txnSql = "INSERT INTO transactions(from_account, to_account, amount) VALUES (?, ?, ?)";
             PreparedStatement txnStmt = conn.prepareStatement(txnSql);
             txnStmt.setInt(1, senderId);
             txnStmt.setInt(2, receiverId);

@@ -37,6 +37,21 @@ public class UserServlet extends HttpServlet {
                 res.getWriter().println("{\"status\":\"LOGIN SUCCESS\"}");
             }
 
+            else if(req.getRequestURI().endsWith("/link-account")) {
+
+                Integer userId = (Integer) req.getSession().getAttribute("userId");
+
+                if(userId == null) {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.getWriter().println("User not logged in");
+                    return;
+                }
+
+                LinkAccountRequest request = mapper.readValue(req.getInputStream(), LinkAccountRequest.class);
+                service.linkAccount(userId, request.getAccountNumber());
+                res.getWriter().println("{\"status\":\"ACCOUNT LINKED\"}");
+            }
+
         } catch(Exception e) {
 
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST);

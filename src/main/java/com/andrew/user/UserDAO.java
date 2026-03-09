@@ -62,4 +62,23 @@ public class UserDAO {
         }
     }
 
+    public boolean userOwnsAccount(int userId, long accountNumber) throws Exception {
+
+        String sql =
+                "SELECT * FROM user_accounts ua " +
+                        "JOIN accounts a ON ua.account_id = a.account_id " +
+                        "WHERE ua.user_id = ? AND a.account_number = ?";
+
+        try(Connection conn = DatabaseUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            stmt.setLong(2, accountNumber);
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+        }
+    }
+
 }

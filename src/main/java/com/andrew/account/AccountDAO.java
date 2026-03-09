@@ -5,6 +5,8 @@ import com.andrew.branch.Branch;
 import com.andrew.branch.BranchDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDAO {
 
@@ -75,5 +77,49 @@ public class AccountDAO {
 
             return null;
         }
+    }
+
+    public List<Account> getAccountsByUserId(int userId) throws Exception {
+
+        List<Account> list = new ArrayList<>();
+
+        String sql =
+                "SELECT a.account_id, a.account_number, a.account_holder_name, a.opening_date, a.balance, " +
+                        "b.branch_id, b.branch_name, b.ifsc_code, b.city " +
+                        "FROM accounts a " +
+                        "JOIN user_accounts ua ON a.account_id = ua.account_id " +
+                        "JOIN branches b ON a.branch_id = b.branch_id " +
+                        "WHERE ua.user_id = ?";
+
+        try(Connection conn = DatabaseUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+
+                Branch branch = new Branch(
+                        rs.getInt("branch_id"),
+                        rs.getString("branch_name"),
+                        rs.getString("ifsc_code"),
+                        rs.getString("city")
+                );
+
+                Account account = new Account(
+                        rs.getInt("account_id"),
+                        rs.getLong("account_number"),
+                        rs.getString("account_holder_name"),
+                        branch,
+                        rs.getDate("opening_date").toLocalDate(),
+                        rs.getDouble("balance")
+                );
+
+                list.add(account);
+            }
+        }
+
+        return list;
     }
 }
