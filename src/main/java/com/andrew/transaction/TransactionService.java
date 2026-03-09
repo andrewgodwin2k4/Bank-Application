@@ -102,7 +102,7 @@ public class TransactionService {
             updateStmt.executeUpdate();
 
             String txnSql = "INSERT INTO transactions(from_account, to_account, amount, transaction_type) " +
-                            "VALUES (NULL, ?, ?, 'DEPOSIT')";
+                            "VALUES (NULL, ?, ?)";
 
             PreparedStatement txnStmt = conn.prepareStatement(txnSql);
             txnStmt.setInt(1, accountId);
@@ -154,7 +154,7 @@ public class TransactionService {
             updateStmt.executeUpdate();
 
             String txnSql = "INSERT INTO transactions(from_account, to_account, amount, transaction_type) " +
-                            "VALUES (?, NULL, ?, 'WITHDRAW')";
+                            "VALUES (?, NULL, ?)";
 
             PreparedStatement txnStmt = conn.prepareStatement(txnSql);
             txnStmt.setInt(1, accountId);
